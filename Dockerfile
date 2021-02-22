@@ -34,7 +34,7 @@ WORKDIR /app
 
 COPY --from=build /app/build/bin/http-server .
 
-ENTRYPOINT [ "/app/http-server" ]
+ENTRYPOINT [ "/app/http-server", "0.0.0.0", "8019", "." ]
 
-EXPOSE 8018
+EXPOSE 8019
 
