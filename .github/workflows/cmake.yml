@@ -22,12 +22,17 @@ jobs:
       # We'll use this as our working directory for all subsequent commands
       run: cmake -E make_directory ${{github.workspace}}/build ${{github.workspace}}/conandir
       
-    - name: Setup conan
+    - name: Setup Environment for conan
+      shell: bash
+      working-directory: ${{github.workspace}}
+      run: sudo apt-get update && \
+            apt-get install -y python3-pip && \
+            pip3 install conan
+            
+    - name: Install conan
       shell: bash
       working-directory: ${{github.workspace}}/conandir
-      run: sudo apt-get update && \
-            apt-get install -y python3-pip && pip3 install conan && \
-            conan install ..
+      run: conan install ..
             
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
