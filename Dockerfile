@@ -18,10 +18,10 @@ WORKDIR /app/conandir
 
 RUN conan install ..
 
-WORKDIR /app/build
+WORKDIR /app
 
-RUN cmake .. && \
-    cmake --build .
+RUN cmake -Bbuild && \
+    cmake --build build
 
 # Run application
 
