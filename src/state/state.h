@@ -4,13 +4,16 @@
 #include <mutex>
 #include <unordered_set>
 
-class ws_session;
+namespace net
+{
+
+class WebSocketSession;
 
 class State {
     std::string const doc_root_;
     std::mutex mutex_;
 
-    std::unordered_set<ws_session*> sessions_;
+    std::unordered_set<WebSocketSession*> sessions_;
 
 public:
     explicit State(std::string doc_root);
@@ -19,8 +22,11 @@ public:
         return doc_root_;
     }
 
-    void join(ws_session *);
-    void leave(ws_session *);
+    void join(WebSocketSession *);
+    void leave(WebSocketSession *);
     void send(std::string);
 
 };
+
+
+} // end net namespace

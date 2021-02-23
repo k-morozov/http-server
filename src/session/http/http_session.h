@@ -28,15 +28,15 @@ namespace net
     namespace ws = beast::websocket;
 
     // Handles an HTTP server connection
-    class Session : public std::enable_shared_from_this<Session>
+    class HttpSession : public std::enable_shared_from_this<HttpSession>
     {
         // This is the C++11 equivalent of a generic lambda.
         // The function object is used to send an HTTP message.
         struct send_lambda
         {
-            Session &self_;
+            HttpSession &self_;
 
-            explicit send_lambda(Session &self)
+            explicit send_lambda(HttpSession &self)
                 : self_(self)
             {
             }
@@ -50,19 +50,6 @@ namespace net
                 // we use a shared_ptr to manage it.
                 auto sp = std::make_shared<
                     http::message<isRequest, Body, Fields>>(std::move(msg));
-
-                // Store a type-erased version of the shared
-                // pointer in the class to keep it alive.
-                // self_.res_ = sp;
-
-                // Write the response
-                // http::async_write(
-                //     self_.stream_,
-                //     *sp,
-                //     beast::bind_front_handler(
-                //         &Session::on_write,
-                //         self_.shared_from_this(),
-                //         sp->need_eof()));
 
                 auto self = self_.shared_from_this();
                 http::async_write(
@@ -78,9 +65,6 @@ namespace net
         beast::flat_buffer buffer_;
         std::shared_ptr<State> state_;
 
-        // std::shared_ptr<std::string const> doc_root_;
-        // http::request<http::string_body> req_;
-        // std::shared_ptr<void> res_;
         send_lambda lambda_;
 
         // The parser is stored in an optional container so we can
@@ -88,7 +72,7 @@ namespace net
         boost::optional<http::request_parser<http::string_body>> parser_;
 
     public:
-        Session(
+        HttpSession(
             tcp::socket &&,
             std::shared_ptr<State> const &state);
 
@@ -99,7 +83,6 @@ namespace net
 
         void on_read(beast::error_code, std::size_t);
 
-        // void on_write(bool, beast::error_code, std::size_t);
         void on_write(beast::error_code ec, std::size_t, bool close);
 
         void do_close();

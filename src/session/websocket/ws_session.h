@@ -5,7 +5,11 @@
 #include "state/state.h"
 #include <memory>
 
-// namespace net = boost::asio;
+namespace net
+{
+
+
+namespace ba = boost::asio;
 namespace beast = boost::beast;                 
 namespace http = beast::http;
 namespace ws = beast::websocket; 
@@ -17,7 +21,7 @@ class State;
 
 /** Represents an active WebSocket connection to the server
 */
-class ws_session : public std::enable_shared_from_this<ws_session>
+class WebSocketSession : public std::enable_shared_from_this<WebSocketSession>
 {
     beast::flat_buffer buffer_;
     ws::stream<beast::tcp_stream> ws_;
@@ -30,11 +34,11 @@ class ws_session : public std::enable_shared_from_this<ws_session>
     void on_write(beast::error_code ec, std::size_t bytes_transferred);
 
 public:
-    ws_session(
+    WebSocketSession(
         tcp::socket&& socket,
         std::shared_ptr<State> const& state);
 
-    ~ws_session();
+    ~WebSocketSession();
 
     template<class Body, class Allocator>
     void run(http::request<Body, http::basic_fields<Allocator>> req);
@@ -48,7 +52,7 @@ private:
 };
 
 template<class Body, class Allocator>
-void ws_session::run(http::request<Body, http::basic_fields<Allocator>> req)
+void WebSocketSession::run(http::request<Body, http::basic_fields<Allocator>> req)
 {
     // Set suggested timeout settings for the websocket
     ws_.set_option(
@@ -68,6 +72,9 @@ void ws_session::run(http::request<Body, http::basic_fields<Allocator>> req)
     ws_.async_accept(
         req,
         beast::bind_front_handler(
-            &ws_session::on_accept,
+            &WebSocketSession::on_accept,
             shared_from_this()));
 }
+
+
+} // end net namespace

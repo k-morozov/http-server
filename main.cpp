@@ -2,7 +2,6 @@
 
 int main(int argc, char* argv[])
 {
-    // Create and launch a listening port
     try 
     {
         if (argc != 5)
@@ -23,7 +22,7 @@ int main(int argc, char* argv[])
         auto listener = std::make_shared<net::Listener> (
         ioc,
         net::tcp::endpoint{address, port},
-        std::make_shared<State>(doc_root));
+        std::make_shared<net::State>(doc_root));
 
         listener->run();
 

@@ -36,7 +36,7 @@ void Listener::on_accept(beast::error_code ec, tcp::socket socket)
 {
     if(!ec)
     {
-        std::make_shared<Session>(std::move(socket), state_)->run();
+        std::make_shared<HttpSession>(std::move(socket), state_)->run();
     }
     else
     {
