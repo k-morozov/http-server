@@ -11,7 +11,9 @@ file(GLOB APP_FILES
     main.cpp
     src/listener/listener.cpp
     src/session/session.cpp
+    src/session/ws_session.cpp
     src/common/common.h
+    src/state/state.cpp
 )
 source_group ("" FILES ${APP_FILES})
 add_executable(${APP_NAME} ${APP_FILES})
