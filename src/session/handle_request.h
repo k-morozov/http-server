@@ -72,8 +72,18 @@ void handle_request(
 
     // Build the path to the requested file
     std::string path = path_cat(doc_root, req.target());
+    
+    std::cout << "path: " <<path << std::endl;
+    std::cout << "req: " << req.target() << std::endl;
+
     if(req.target().back() == '/')
         path.append("index.html");
+    if(req.target().find("main_page") != std::string::npos) 
+        // path.append("main_page.html");
+        path = "./html/main_page.html";
+
+    std::cout << "path: " << path << std::endl;
+    std::cout << "req: " << req.target() << std::endl;
 
     // Attempt to open the file
     beast::error_code ec;
