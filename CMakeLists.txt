@@ -10,8 +10,10 @@ conan_basic_setup()
 file(GLOB APP_FILES
     main.cpp
     src/listener/listener.cpp
-    src/session/session.cpp
+    src/session/http/http_session.cpp
+    src/session/websocket/ws_session.cpp
     src/common/common.h
+    src/state/state.cpp
 )
 source_group ("" FILES ${APP_FILES})
 add_executable(${APP_NAME} ${APP_FILES})

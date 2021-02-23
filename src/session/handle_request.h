@@ -10,12 +10,11 @@ namespace beast = boost::beast;
 namespace http = boost::beast::http;
 
 
-// This function produces an HTTP response for the given
-// request. The type of the response object depends on the
-// contents of the request, so the interface requires the
-// caller to pass a generic lambda for receiving the response.
-template<class Body, class Allocator, class Send>
-void handle_request(
+template<
+    class Body, class Allocator,
+    class Send>
+void
+handle_request(
     beast::string_view doc_root,
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send)
@@ -72,18 +71,8 @@ void handle_request(
 
     // Build the path to the requested file
     std::string path = path_cat(doc_root, req.target());
-    
-    std::cout << "path: " <<path << std::endl;
-    std::cout << "req: " << req.target() << std::endl;
-
     if(req.target().back() == '/')
         path.append("index.html");
-    if(req.target().find("main_page") != std::string::npos) 
-        // path.append("main_page.html");
-        path = "./html/main_page.html";
-
-    std::cout << "path: " << path << std::endl;
-    std::cout << "req: " << req.target() << std::endl;
 
     // Attempt to open the file
     beast::error_code ec;
@@ -91,7 +80,7 @@ void handle_request(
     body.open(path.c_str(), beast::file_mode::scan, ec);
 
     // Handle the case where the file doesn't exist
-    if(ec == beast::errc::no_such_file_or_directory)
+    if(ec == boost::system::errc::no_such_file_or_directory)
         return send(not_found(req.target()));
 
     // Handle an unknown error

@@ -6,10 +6,10 @@ namespace net {
 Listener::Listener(
         ba::io_context& ioc,
         tcp::endpoint endpoint,
-        std::shared_ptr<std::string const> const& doc_root)
+        std::shared_ptr<State> state)
         : ioc_(ioc)
         , acceptor_(ba::make_strand(ioc))
-        , doc_root_(doc_root)
+        , state_(state)
 {
     acceptor_.open(endpoint.protocol());
 
@@ -36,9 +36,7 @@ void Listener::on_accept(beast::error_code ec, tcp::socket socket)
 {
     if(!ec)
     {
-        std::make_shared<Session>(
-            std::move(socket),
-               doc_root_)->run();
+        std::make_shared<HttpSession>(std::move(socket), state_)->run();
     }
     else
     {
