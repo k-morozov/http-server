@@ -4,14 +4,17 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 
+
+namespace net {
+
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 
 // Return a reasonable mime type based on the extension of a file.
-beast::string_view mime_type(beast::string_view path)
+inline beast::string_view mime_type(beast::string_view path)
 {
     using beast::iequals;
     auto const ext = [&path]
@@ -47,7 +50,7 @@ beast::string_view mime_type(beast::string_view path)
 
 // Append an HTTP rel-path to a local filesystem path.
 // The returned path is normalized for the platform.
-std::string path_cat(
+inline std::string path_cat(
     beast::string_view base,
     beast::string_view path)
 {
@@ -72,7 +75,10 @@ std::string path_cat(
 }
 
 // Report a failure
-void fail(beast::error_code ec, char const* what)
+inline void fail(beast::error_code ec, char const* what)
 {
     std::cerr << what << ": " << ec.message() << "\n";
 }
+
+
+} // end net namespace

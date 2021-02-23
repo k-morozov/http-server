@@ -9,8 +9,8 @@ conan_basic_setup()
 
 file(GLOB APP_FILES
     main.cpp
-    src/listener/listener.h
-    src/session/session.h
+    src/listener/listener.cpp
+    src/session/session.cpp
     src/common/common.h
 )
 source_group ("" FILES ${APP_FILES})
